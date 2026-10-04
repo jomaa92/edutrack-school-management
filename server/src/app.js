@@ -1,4 +1,5 @@
 import express from "express";
+import usersRouter from "./routes/users.routes.js";
 
 const app = express();
 
@@ -10,5 +11,7 @@ app.get("/api/health", (req, res) => {
     message: "EduTrack API is running",
   });
 });
+
+app.use("/api/users", usersRouter);
 
 export default app;
