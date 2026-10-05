@@ -6,10 +6,10 @@ const PORT = process.env.PORT || 3000;
 
 async function startServer() {
   try {
-    const result = await pool.query("SELECT * FROM users");
+    const result = await pool.query("SELECT now()");
 
     console.log("Database connected:");
-    console.log(result.rows[0]);
+    console.log(result.rows[0].now);
 
     app.listen(PORT, () => {
       console.log(`EduTrack API running on port ${PORT}`);

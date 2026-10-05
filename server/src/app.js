@@ -5,6 +5,10 @@ const app = express();
 
 app.use(express.json());
 
+////////////////////////////////////////////////////
+////          Health Check Endpoint             ////
+////////////////////////////////////////////////////
+
 app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
@@ -12,6 +16,9 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+////////////////////////////////////////////////////
+////               API Routes                   ////
+////////////////////////////////////////////////////
 app.use("/api/users", usersRouter);
 
 export default app;
