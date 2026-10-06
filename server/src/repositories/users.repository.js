@@ -92,3 +92,56 @@ export async function createUser({
 
   return result.rows[0];
 }
+
+////////////////////////////////////////////////////
+////             Update User By ID              ////
+////////////////////////////////////////////////////
+
+export async function updateUserById(id, updates) {
+  const fields = [];
+  const values = [];
+  let parameterIndex = 1;
+
+  if (updates.firstName !== undefined) {
+    fields.push(`first_name = $${parameterIndex++}`);
+    values.push(updates.firstName);
+  }
+
+  if (updates.lastName !== undefined) {
+    fields.push(`last_name = $${parameterIndex++}`);
+    values.push(updates.lastName);
+  }
+
+  if (updates.email !== undefined) {
+    fields.push(`email = $${parameterIndex++}`);
+    values.push(updates.email);
+  }
+
+  if (updates.role !== undefined) {
+    fields.push(`role = $${parameterIndex++}`);
+    values.push(updates.role);
+  }
+
+  if (fields.length === 0) {
+    return null;
+  }
+
+  values.push(id);
+
+  const result = await pool.query(
+    `
+      UPDATE users
+      SET ${fields.join(", ")}
+      WHERE id = $${parameterIndex}
+      RETURNING
+        id,
+        first_name,
+        last_name,
+        email,
+        role
+    `,
+    values,
+  );
+
+  return result.rows[0];
+}

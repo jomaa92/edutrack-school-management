@@ -5,6 +5,7 @@ import {
   getAllUsers,
   getUserById,
   createUser,
+  updateUser,
 } from "../services/users.service.js";
 ////////////////////////////////////////////////////
 ////                  GET-USERS                 ////
@@ -91,6 +92,40 @@ export async function createUserController(req, res) {
     res.status(statusCode).json({
       error: {
         message: error.message || "Failed to create user",
+      },
+    });
+  }
+}
+
+////////////////////////////////////////////////////
+////             Update User Controller         ////
+////////////////////////////////////////////////////
+
+export async function updateUserController(req, res) {
+  try {
+    const { id } = req.params;
+
+    const userId = Number(id);
+
+    if (!Number.isInteger(userId) || userId <= 0) {
+      return res.status(400).json({
+        error: {
+          message: "Invalid user ID",
+        },
+      });
+    }
+
+    const updatedUser = await updateUser(userId, req.body);
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Failed to update user:", error);
+
+    const statusCode = error.statusCode || 500;
+
+    res.status(statusCode).json({
+      error: {
+        message: error.message || "Failed to update user",
       },
     });
   }
