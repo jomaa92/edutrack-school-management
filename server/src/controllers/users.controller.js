@@ -6,6 +6,7 @@ import {
   getUserById,
   createUser,
   updateUser,
+  deleteUser,
 } from "../services/users.service.js";
 ////////////////////////////////////////////////////
 ////                  GET-USERS                 ////
@@ -126,6 +127,43 @@ export async function updateUserController(req, res) {
     res.status(statusCode).json({
       error: {
         message: error.message || "Failed to update user",
+      },
+    });
+  }
+}
+
+////////////////////////////////////////////////////
+////             Delete User Controller         ////
+////////////////////////////////////////////////////
+
+export async function deleteUserController(req, res) {
+  try {
+    const { id } = req.params;
+
+    const userId = Number(id);
+
+    if (!Number.isInteger(userId) || userId <= 0) {
+      return res.status(400).json({
+        error: {
+          message: "Invalid user ID",
+        },
+      });
+    }
+
+    const deletedUser = await deleteUser(userId);
+
+    res.status(200).json({
+      message: "User deleted successfully",
+      user: deletedUser,
+    });
+  } catch (error) {
+    console.error("Failed to delete user:", error);
+
+    const statusCode = error.statusCode || 500;
+
+    res.status(statusCode).json({
+      error: {
+        message: error.message || "Failed to delete user",
       },
     });
   }

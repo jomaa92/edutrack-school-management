@@ -145,3 +145,25 @@ export async function updateUserById(id, updates) {
 
   return result.rows[0];
 }
+
+////////////////////////////////////////////////////
+////             Delete User By ID              ////
+////////////////////////////////////////////////////
+
+export async function deleteUserById(id) {
+  const result = await pool.query(
+    `
+      DELETE FROM users
+      WHERE id = $1
+      RETURNING
+        id,
+        first_name,
+        last_name,
+        email,
+        role
+    `,
+    [id],
+  );
+
+  return result.rows[0];
+}

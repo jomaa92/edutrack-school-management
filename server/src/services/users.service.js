@@ -5,6 +5,7 @@ import {
   findUserByEmail,
   createUser as createUserRepository,
   updateUserById,
+  deleteUserById,
 } from "../repositories/users.repository.js";
 
 ////////////////////////////////////////////////////
@@ -140,4 +141,36 @@ export async function updateUser(id, updates) {
   const updatedUser = await updateUserById(id, cleanUpdates);
 
   return updatedUser;
+}
+
+////////////////////////////////////////////////////
+////                Delete User                 ////
+////////////////////////////////////////////////////
+
+export async function deleteUser(id) {
+  const existingUser = await findUserById(id);
+
+  if (!existingUser) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  try {
+    const deletedUser = await deleteUserById(id);
+
+    return deletedUser;
+  } catch (error) {
+    if (error.code === "23503") {
+      const conflictError = new Error(
+        "User cannot be deleted because related records exist",
+      );
+
+      conflictError.statusCode = 409;
+
+      throw conflictError;
+    }
+
+    throw error;
+  }
 }
