@@ -167,3 +167,25 @@ export async function deleteUserById(id) {
 
   return result.rows[0];
 }
+
+////////////////////////////////////////////////////
+////       Find User For Authentication         ////
+////////////////////////////////////////////////////
+export async function findUserForAuthentication(email) {
+  const result = await pool.query(
+    `
+      SELECT
+        id,
+        first_name,
+        last_name,
+        email,
+        password_hash,
+        role
+      FROM users
+      WHERE email = $1
+    `,
+    [email],
+  );
+
+  return result.rows[0];
+}
