@@ -47,3 +47,27 @@ export function getCurrentUser(req, res) {
     user: req.user,
   });
 }
+
+////////////////////////////////////////////////////
+////             Logout Controller              ////
+////////////////////////////////////////////////////
+
+export function logout(req, res, next) {
+  req.logout((error) => {
+    if (error) {
+      return next(error);
+    }
+
+    req.session.destroy((error) => {
+      if (error) {
+        return next(error);
+      }
+
+      res.clearCookie("connect.sid");
+
+      return res.status(200).json({
+        message: "Logout successful",
+      });
+    });
+  });
+}
