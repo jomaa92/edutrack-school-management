@@ -171,6 +171,7 @@ export async function deleteUserById(id) {
 ////////////////////////////////////////////////////
 ////       Find User For Authentication         ////
 ////////////////////////////////////////////////////
+
 export async function findUserForAuthentication(email) {
   const result = await pool.query(
     `
