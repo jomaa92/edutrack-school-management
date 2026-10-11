@@ -7,11 +7,13 @@ import {
   deleteUserController,
 } from "../controllers/users.controller.js";
 
+import { requireAuth, requireAdmin } from "../middleware/auth.middleware.js";
+
 const router = Router();
 
-router.get("/", getUsers);
-router.get("/:id", getUser);
-router.post("/", createUserController);
-router.patch("/:id", updateUserController);
-router.delete("/:id", deleteUserController);
+router.get("/", requireAdmin, getUsers);
+router.get("/:id", requireAdmin, getUser);
+router.post("/", requireAdmin, createUserController);
+router.patch("/:id", requireAdmin, updateUserController);
+router.delete("/:id", requireAdmin, deleteUserController);
 export default router;
