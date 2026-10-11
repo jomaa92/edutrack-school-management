@@ -7,6 +7,7 @@ import session from "express-session";
 import passport from "./config/passport.js";
 import usersRouter from "./routes/users.routes.js";
 import authRouter from "./routes/auth.routes.js";
+import coursesRouter from "./routes/course.routes.js";
 
 const app = express();
 
@@ -45,5 +46,6 @@ app.get("/api/health", (req, res) => {
 ////////////////////////////////////////////////////
 app.use("/api/users", usersRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/courses", coursesRouter);
 
 export default app;
