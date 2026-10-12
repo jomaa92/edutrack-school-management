@@ -2,7 +2,11 @@
 ////          Courses Controller                ////
 ////////////////////////////////////////////////////
 
-import { getAllCourses, getCourseById } from "../services/course.service.js";
+import {
+  getAllCourses,
+  getCourseById,
+  createCourse,
+} from "../services/course.service.js";
 
 export async function getCourses(req, res, next) {
   try {
@@ -37,6 +41,32 @@ export async function getCourse(req, res, next) {
     return res.status(statusCode).json({
       error: {
         message: error.message || "Failed to get course",
+      },
+    });
+  }
+}
+
+////////////////////////////////////////////////////
+////       Courses Controller - createCourse    ////
+////////////////////////////////////////////////////
+
+export async function createCourseController(req, res) {
+  try {
+    const { name, description, teacherId } = req.body;
+
+    const course = await createCourse({
+      name,
+      description,
+      teacherId,
+    });
+
+    return res.status(201).json(course);
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+
+    return res.status(statusCode).json({
+      error: {
+        message: error.message || "Failed to create course",
       },
     });
   }

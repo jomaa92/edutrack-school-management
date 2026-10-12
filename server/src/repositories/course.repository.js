@@ -42,3 +42,30 @@ export async function findCourseById(id) {
 
   return result.rows[0];
 }
+
+////////////////////////////////////////////////////
+////        Courses Repository - createCourse   ////
+////////////////////////////////////////////////////
+
+export async function createCourse({ name, description, teacherId }) {
+  const result = await pool.query(
+    `
+      INSERT INTO courses (
+        name,
+        description,
+        teacher_id
+      )
+      VALUES ($1, $2, $3)
+      RETURNING
+        id,
+        name,
+        description,
+        teacher_id,
+        created_at,
+        updated_at
+    `,
+    [name, description, teacherId],
+  );
+
+  return result.rows[0];
+}

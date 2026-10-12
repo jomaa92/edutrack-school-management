@@ -4,13 +4,18 @@
 
 import { Router } from "express";
 
-import { getCourses, getCourse } from "../controllers/course.controller.js";
+import {
+  getCourses,
+  getCourse,
+  createCourseController,
+} from "../controllers/course.controller.js";
 
-import { requireAuth } from "../middleware/auth.middleware.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
 router.get("/", requireAuth, getCourses);
 router.get("/:id", requireAuth, getCourse);
+router.post("/", requireAdmin, createCourseController);
 
 export default router;
