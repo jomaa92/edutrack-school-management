@@ -69,3 +69,48 @@ export async function createCourse({ name, description, teacherId }) {
 
   return result.rows[0];
 }
+
+////////////////////////////////////////////////////
+////     Courses Repository - updateCourseById  ////
+////////////////////////////////////////////////////
+
+export async function updateCourseById(id, updates) {
+  const fields = [];
+  const values = [];
+  let parameterIndex = 1;
+
+  if (updates.name !== undefined) {
+    fields.push(`name = $${parameterIndex++}`);
+    values.push(updates.name);
+  }
+
+  if (updates.description !== undefined) {
+    fields.push(`description = $${parameterIndex++}`);
+    values.push(updates.description);
+  }
+
+  if (updates.teacherId !== undefined) {
+    fields.push(`teacher_id = $${parameterIndex++}`);
+    values.push(updates.teacherId);
+  }
+
+  values.push(id);
+
+  const result = await pool.query(
+    `
+      UPDATE courses
+      SET ${fields.join(", ")}
+      WHERE id = $${parameterIndex}
+      RETURNING
+        id,
+        name,
+        description,
+        teacher_id,
+        created_at,
+        updated_at
+    `,
+    values,
+  );
+
+  return result.rows[0];
+}
