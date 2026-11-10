@@ -114,3 +114,27 @@ export async function updateCourseById(id, updates) {
 
   return result.rows[0];
 }
+
+////////////////////////////////////////////////////
+////    Courses Repository - deleteCourseById   ////
+////////////////////////////////////////////////////
+import pool from "../config/database.js";
+
+export async function deleteCourseById(id) {
+  const result = await pool.query(
+    `
+      DELETE FROM courses
+      WHERE id = $1
+      RETURNING
+        id,
+        name,
+        description,
+        teacher_id,
+        created_at,
+        updated_at
+    `,
+    [id],
+  );
+
+  return result.rows[0];
+}

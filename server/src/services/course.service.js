@@ -7,6 +7,7 @@ import {
   findCourseById,
   createCourse as createCourseRepository,
   updateCourseById,
+  deleteCourseById,
 } from "../repositories/course.repository.js";
 
 export async function getAllCourses() {
@@ -157,4 +158,35 @@ export async function updateCourse(id, updates) {
   const updatedCourse = await updateCourseById(id, cleanUpdates);
 
   return updatedCourse;
+}
+
+////////////////////////////////////////////////////
+////           Courses Service - deleteCourse   ////
+////////////////////////////////////////////////////
+export async function deleteCourse(id) {
+  const existingCourse = await findCourseById(id);
+
+  if (!existingCourse) {
+    const error = new Error("Course not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  try {
+    const deletedCourse = await deleteCourseById(id);
+
+    return deletedCourse;
+  } catch (error) {
+    if (error.code === "23503") {
+      const conflictError = new Error(
+        "Course cannot be deleted because related records exist",
+      );
+
+      conflictError.statusCode = 409;
+
+      throw conflictError;
+    }
+
+    throw error;
+  }
 }

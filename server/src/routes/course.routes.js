@@ -9,6 +9,7 @@ import {
   getCourse,
   createCourseController,
   updateCourseController,
+  deleteCourseController,
 } from "../controllers/course.controller.js";
 
 import { requireAuth, requireAdmin } from "../middleware/auth.middleware.js";
@@ -19,5 +20,6 @@ router.get("/", requireAuth, getCourses);
 router.get("/:id", requireAuth, getCourse);
 router.post("/", requireAdmin, createCourseController);
 router.patch("/:id", requireAdmin, updateCourseController);
+router.delete("/:id", requireAdmin, deleteCourseController);
 
 export default router;

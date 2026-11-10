@@ -7,6 +7,7 @@ import {
   getCourseById,
   createCourse,
   updateCourse,
+  deleteCourse,
 } from "../services/course.service.js";
 
 export async function getCourses(req, res, next) {
@@ -100,6 +101,40 @@ export async function updateCourseController(req, res) {
     return res.status(statusCode).json({
       error: {
         message: error.message || "Failed to update course",
+      },
+    });
+  }
+}
+
+////////////////////////////////////////////////////
+////    Courses Controller - deleteCourse       ////
+////////////////////////////////////////////////////
+export async function deleteCourseController(req, res) {
+  try {
+    const { id } = req.params;
+
+    const courseId = Number(id);
+
+    if (!Number.isInteger(courseId) || courseId <= 0) {
+      return res.status(400).json({
+        error: {
+          message: "Invalid course ID",
+        },
+      });
+    }
+
+    const deletedCourse = await deleteCourse(courseId);
+
+    return res.status(200).json({
+      message: "Course deleted successfully",
+      course: deletedCourse,
+    });
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+
+    return res.status(statusCode).json({
+      error: {
+        message: error.message || "Failed to delete course",
       },
     });
   }
