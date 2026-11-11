@@ -118,7 +118,6 @@ export async function updateCourseById(id, updates) {
 ////////////////////////////////////////////////////
 ////    Courses Repository - deleteCourseById   ////
 ////////////////////////////////////////////////////
-import pool from "../config/database.js";
 
 export async function deleteCourseById(id) {
   const result = await pool.query(

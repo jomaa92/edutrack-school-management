@@ -1,6 +1,6 @@
 import { findCourseById } from "../repositories/course.repository.js";
 
-import { findUserById } from "../repositories/user.repository.js";
+import { findUserById } from "../repositories/users.repository.js";
 
 import {
   findEnrollmentByStudentAndCourse,
