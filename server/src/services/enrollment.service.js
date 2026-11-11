@@ -5,6 +5,7 @@ import { findUserById } from "../repositories/users.repository.js";
 import {
   findEnrollmentByStudentAndCourse,
   createEnrollment as createEnrollmentRepository,
+  findStudentsByCourseId,
 } from "../repositories/enrollment.repository.js";
 
 ////////////////////////////////////////////////////
@@ -68,4 +69,42 @@ export async function enrollStudent(courseId, studentId) {
   );
 
   return enrollment;
+}
+
+/////////////////////////////////////////////////////////
+////     Enrollments Service - getStudentsByCourseId ////
+/////////////////////////////////////////////////////////
+
+export async function getStudentsByCourseId(courseId, currentUser) {
+  const parsedCourseId = Number(courseId);
+
+  if (!Number.isInteger(parsedCourseId) || parsedCourseId <= 0) {
+    const error = new Error("Invalid course ID");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const course = await findCourseById(parsedCourseId);
+
+  if (!course) {
+    const error = new Error("Course not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  if (
+    currentUser.role !== "admin" &&
+    !(currentUser.role === "teacher" && course.teacher_id === currentUser.id)
+  ) {
+    const error = new Error(
+      "You are not allowed to view students in this course",
+    );
+
+    error.statusCode = 403;
+    throw error;
+  }
+
+  const students = await findStudentsByCourseId(parsedCourseId);
+
+  return students;
 }

@@ -44,3 +44,29 @@ export async function createEnrollment(studentId, courseId) {
 
   return result.rows[0];
 }
+
+////////////////////////////////////////////////////
+//// Enrollments Repository - findStudentsByCourseId
+////////////////////////////////////////////////////
+
+export async function findStudentsByCourseId(courseId) {
+  const result = await pool.query(
+    `
+      SELECT
+        e.id AS enrollment_id,
+        e.enrolled_at,
+        u.id AS student_id,
+        u.first_name,
+        u.last_name,
+        u.email
+      FROM enrollments e
+      JOIN users u
+        ON u.id = e.student_id
+      WHERE e.course_id = $1
+      ORDER BY u.last_name, u.first_name
+    `,
+    [courseId],
+  );
+
+  return result.rows;
+}
